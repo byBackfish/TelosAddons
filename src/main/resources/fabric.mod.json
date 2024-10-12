@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "telosaddons",
+  "version": "${version}",
+  "name": "Telos Addons",
+  "description": "This is a quality of life mod for Avalon.",
+  "authors": [
+    "byBackfish"
+  ],
+  "license": "CC0-1.0",
+  "icon": "assets/telosaddons/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      {
+        "adapter": "kotlin",
+        "value": "de.bybackfish.telosaddons.TelosAddons"
+      }
+    ]
+  },
+  "mixins": [
+    "telosaddons.mixins.json"
+  ],
+  "accessWidener": "telosaddons.accesswidener",
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "fabric": "*",
+    "minecraft": "1.21.x",
+    "java": ">=17",
+    "fabric-language-kotlin": ">=1.8.3+kotlin.1.7.10"
+  }
+}
