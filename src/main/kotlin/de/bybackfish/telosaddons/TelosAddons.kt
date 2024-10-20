@@ -72,7 +72,8 @@ class TelosAddons : ModInitializer {
             InfoOverlayFeature(),
             HoldToSwingFeature(),
             DebugFeature(),
-            ShowAllLootbagFeature()
+            ShowAllLootbagFeature(),
+            BagFakeFeature()
         )
 
         featureManager.loadToConfig()

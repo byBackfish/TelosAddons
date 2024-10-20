@@ -3,6 +3,7 @@ package de.bybackfish.telosaddons.mixins;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import de.bybackfish.telosaddons.events.ItemDisplaySpawnEvent;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.CustomModelDataComponent;
@@ -30,17 +31,20 @@ import static de.bybackfish.telosaddons.core.MixinHelperKt.handleEntity;
 @Mixin(ClientPlayNetworkHandler.class)
 public class EntitySpawnMixin {
 
+    @Inject(method = "onEntitySpawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;onSpawnPacket(Lnet/minecraft/network/packet/s2c/play/EntitySpawnS2CPacket;)V"))
+    void onEntitySpawn(EntitySpawnS2CPacket packet, CallbackInfo ci, @Local(ordinal = 0) Entity entity) {
+        if(entity == null) return;
+        MinecraftClient.getInstance().executeTask(() -> {
+            handleEntity("spawn", entity);
+        });
+    }
+
+    /*
     @Inject(method = "onEntity", at = @At("HEAD"))
     void onEntity(EntityS2CPacket packet, CallbackInfo ci) {
         Entity entity = packet.getEntity((World) ((ClientPlayNetworkHandler) (Object) this).getWorld());
         if(entity == null) return;
         handleEntity("raw", entity);
-    }
-
-    @Inject(method = "onEntitySpawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;onSpawnPacket(Lnet/minecraft/network/packet/s2c/play/EntitySpawnS2CPacket;)V"))
-    void onEntitySpawn(EntitySpawnS2CPacket packet, CallbackInfo ci, @Local(ordinal = 0) Entity entity) {
-        if(entity == null) return;
-        handleEntity("spawn", entity);
     }
 
     @Inject(method = "onEntityAttributes", at = @At("RETURN"))
@@ -72,4 +76,5 @@ public class EntitySpawnMixin {
         Entity entity = ((ClientPlayNetworkHandler) (Object) this).getWorld().getEntityById(packet.getEntityId());
         handleEntity("position", entity);
     }
+     */
 }

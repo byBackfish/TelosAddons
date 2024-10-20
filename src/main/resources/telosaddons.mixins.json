@@ -13,12 +13,10 @@
     "MixinOptionsHud",
     "MixinScreen",
     "PlayerEntityMixin",
+    "SoundMixin",
     "accessors.AccessorHandledScreen"
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "mixins": [
-    "ItemDisplayEntityMixin"
-  ]
+  }
 }

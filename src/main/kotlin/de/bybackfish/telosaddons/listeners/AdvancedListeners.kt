@@ -2,14 +2,15 @@ package de.bybackfish.telosaddons.listeners
 import de.bybackfish.telosaddons.core.event.Subscribe
 
 import de.bybackfish.telosaddons.events.*
-import de.bybackfish.telosaddons.events.telos.BossCompleteEvent
-import de.bybackfish.telosaddons.events.telos.BossDefeatedEvent
-import de.bybackfish.telosaddons.events.telos.BossSpawnEvent
-import de.bybackfish.telosaddons.events.telos.JoinNexusEvent
+import de.bybackfish.telosaddons.events.telos.*
+import de.bybackfish.telosaddons.telos.BagType
 import gg.essential.universal.UChat
 import net.minecraft.client.MinecraftClient
+import net.minecraft.component.DataComponentTypes
+import net.minecraft.item.Items
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket
 import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket
+import java.util.*
 
 class AdvancedListeners {
 
@@ -76,6 +77,24 @@ class AdvancedListeners {
             }
             return
         }
+    }
 
+    val handledItems = mutableSetOf<UUID>()
+
+    @Subscribe
+    fun onItemDisplaySpawn(event: ItemDisplaySpawnEvent) {
+        val itemStack = event.itemRef.get()
+        if(itemStack.item != Items.CARROT_ON_A_STICK) return
+        if(handledItems.contains(event.entity.uuid)) return
+
+        val components = itemStack.components
+        val customModelData = (if(components.contains(DataComponentTypes.CUSTOM_MODEL_DATA)) components.get(
+            DataComponentTypes.CUSTOM_MODEL_DATA)?.value else return) ?: return
+
+        handledItems.add(event.entity.uuid)
+
+        val bagType = BagType.fromDroppedModelData(customModelData) ?: return
+
+        BagDropEvent(bagType, event.itemRef, event.entity).call()
     }
 }

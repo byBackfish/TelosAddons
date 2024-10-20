@@ -2,6 +2,7 @@ package de.bybackfish.telosaddons.command
 
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.builder.LiteralArgumentBuilder.literal
+import de.bybackfish.telosaddons.command.subcommands.MoreLuckCommand
 import de.bybackfish.telosaddons.command.subcommands.MoveCommand
 import de.bybackfish.telosaddons.core.commands.CommandUtil
 import de.bybackfish.telosaddons.core.commands.SubCommand
@@ -18,6 +19,7 @@ class TelosAddonsCommand() : CommandUtil() {
 
     private val commands = mutableListOf<SubCommand>(
         MoveCommand(),
+        MoreLuckCommand()
     )
 
     private fun buildHelp(): List<Text> {

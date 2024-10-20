@@ -23,7 +23,7 @@ import java.awt.Color
 @Category("UI")
 class LootBagFeature: Feature() {
 
-    val defaultOverlayText = "White Bags: {whiteBags}\nBlack Bags: {blackBags}\nGold Bags: {goldBags}\n\nRuns Since White: {runsSinceWhite}\nRuns Since Black: {runsSinceBlack}\nRuns Since Gold: {runsSinceGold}\nRuns Since Rune: {runsSinceRune}\n\nTotal Runs: {totalRuns}"
+    private val defaultOverlayText = "White Bags: {whiteBags}\nBlack Bags: {blackBags}\nGold Bags: {goldBags}\n\nRuns Since White: {runsSinceWhite}\nRuns Since Black: {runsSinceBlack}\nRuns Since Gold: {runsSinceGold}\nRuns Since Rune: {runsSinceRune}\n\nTotal Runs: {totalRuns}"
 
     @Property
     var renderLifetimeStats = true
