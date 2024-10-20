@@ -23,7 +23,7 @@ import java.awt.Color
 @Category("UI")
 class LootBagFeature: Feature() {
 
-    val defaultOverlayText = "White Bags: {whiteBags}\nBlack Bags: {blackBags}\nGold Bags: {goldBags}\nRunes: {runeBags}\n\nRuns Since White: {runsSinceWhite}\nRuns Since Black: {runsSinceBlack}\nRuns Since Gold: {runsSinceGold}\nRuns Since Rune: {runsSinceRune}\n\nTotal Runs: {totalRuns}"
+    val defaultOverlayText = "White Bags: {whiteBags}\nBlack Bags: {blackBags}\nGold Bags: {goldBags}\n\nRuns Since White: {runsSinceWhite}\nRuns Since Black: {runsSinceBlack}\nRuns Since Gold: {runsSinceGold}\nRuns Since Rune: {runsSinceRune}\n\nTotal Runs: {totalRuns}"
 
     @Property
     var renderLifetimeStats = true
@@ -192,7 +192,7 @@ class LootBagFeature: Feature() {
 
         override fun render(context: DrawContext, delta: Float) {
             val text = getText(isLifetime)
-            val height = 15 + (text.size * 13)
+            val height = 15 + ((text.size + 1) * 13)
             this.size.height = height
 
             draw(context,
@@ -203,7 +203,7 @@ class LootBagFeature: Feature() {
 
         override fun renderDummy(context: DrawContext, delta: Float) {
             val text = getText(isLifetime)
-            val height = 15 + (text.size * 13)
+            val height = 15 + ((text.size + 1) * 13)
             this.size.height = height
 
             draw(
