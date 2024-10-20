@@ -33,7 +33,7 @@ class LootBagFeature: Feature() {
 
     @Property(
         forceType = PropertyType.PARAGRAPH,
-        description = "Replaceable text: {whiteBags}, {blackBags}, {goldBags}, {otherBags}, {totalRuns}, {runsSinceWhite}, {runsSinceBlack}, {runsSinceGold}",
+        description = "Replaceable text: {<bag type in lowercase>Bags}, {runsSince<bag type in title>}, {totalRuns}, {otherBags}",
     )
     var overlayText = defaultOverlayText
 
