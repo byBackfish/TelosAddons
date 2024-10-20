@@ -6,13 +6,14 @@ enum class BagType(val customModelData: Int = 0) {
     CYAN,
     BLUE,
     RED,
-    GOLD(4),
-    GREEN(7),
-    WHITE(2),
-    BLACK(3),
-    ORANGE,
-    RELIC(8),
-    CROSS(5),
+    GOLD(15),
+    GREEN(13),
+    WHITE(11),
+    BLACK(10),
+    ORANGE(9),
+    RELIC,
+    CROSS(12),
+    RUNE(14),
     OTHER;
 
 

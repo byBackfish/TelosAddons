@@ -13,6 +13,7 @@ import de.bybackfish.telosaddons.core.feature.overlay.OverlayPosition
 import de.bybackfish.telosaddons.core.feature.overlay.OverlaySize
 import de.bybackfish.telosaddons.events.ClientChatEvent
 import de.bybackfish.telosaddons.events.telos.*
+import de.bybackfish.telosaddons.extensions.title
 import de.bybackfish.telosaddons.telos.BagType
 import gg.essential.vigilance.data.PropertyType
 import net.minecraft.client.MinecraftClient
@@ -22,7 +23,7 @@ import java.awt.Color
 @Category("UI")
 class LootBagFeature: Feature() {
 
-    val defaultOverlayText = "White Bags: {whiteBags}\nBlack Bags: {blackBags}\nGold Bags: {goldBags}\n\nRuns Since White: {runsSinceWhite}\nRuns Since Black: {runsSinceBlack}\nRuns Since Gold: {runsSinceGold}\n\nTotal Runs: {totalRuns}"
+    val defaultOverlayText = "White Bags: {whiteBags}\nBlack Bags: {blackBags}\nGold Bags: {goldBags}\nRunes: {runeBags}\n\nRuns Since White: {runsSinceWhite}\nRuns Since Black: {runsSinceBlack}\nRuns Since Gold: {runsSinceGold}\nRuns Since Rune: {runsSinceRune}\n\nTotal Runs: {totalRuns}"
 
     @Property
     var renderLifetimeStats = true
@@ -50,26 +51,9 @@ class LootBagFeature: Feature() {
     )
     fun resetSessionStats() {
         sessionBagCounts.clear()
-        sessionRunsSinceWhite = 0
-        sessionRunsSinceBlack = 0
-        sessionRunsSinceGold = 0
+        sessionRunsSince.clear()
         sessionTotalRuns = 0
     }
-
-    @Property(
-        hidden = true,
-    )
-    var runsSinceWhite = 0
-
-    @Property(
-        hidden = true,
-    )
-    var runsSinceBlack = 0
-
-    @Property(
-        hidden = true,
-    )
-    var runsSinceGold = 0
 
     @Property(
         hidden = true,
@@ -86,92 +70,57 @@ class LootBagFeature: Feature() {
                     type = PropertyType.NUMBER
                 )
             )
+
+            addSetting(
+                LocalProperty(
+                    name = sinceName(it),
+                    hidden = true,
+                    default = 0,
+                    type = PropertyType.NUMBER
+                )
+            )
         }
     }
 
-    /*
-    *                 "White Bags: $whiteBags",
-                "Black Bags: $blackBags",
-                "Gold Bags: $goldBags",
-                "",
-                "Runs Since White: $runsSinceWhite",
-                "Runs Since Black: $runsSinceBlack",
-                "Runs Since Gold: $runsSinceGold",
-                "",
-                "Total Runs: $totalRuns",
-    *
-    * */
-
-    val replaces = mutableMapOf<String, (Boolean) -> Int>(
-        "otherBags" to {
-          if(it) {
-              property(bagName(BagType.OTHER)) ?: 0
-          } else {
-                sessionBagCounts[BagType.OTHER] ?: 0
-          }
-        },
-        "whiteBags" to {
-            if(it) {
-                property(bagName(BagType.WHITE)) ?: 0
-            } else {
-                sessionBagCounts[BagType.WHITE] ?: 0
-            }
-        },
-        "blackBags" to {
-            if(it) {
-                property(bagName(BagType.BLACK)) ?: 0
-            } else {
-                sessionBagCounts[BagType.BLACK] ?: 0
-            }
-        },
-        "goldBags" to {
-            if(it) {
-                property(bagName(BagType.GOLD)) ?: 0
-            } else {
-                sessionBagCounts[BagType.GOLD] ?: 0
-            }
-        },
-        "totalRuns" to {
-            if(it) {
+    val replaces = BagType.entries.map {
+        return@map listOf(
+            bagName(it) to { isLifetime: Boolean ->
+                if(isLifetime) {
+                    property(bagName(it)) ?: 0
+                } else {
+                    sessionBagCounts[it] ?: 0
+                }
+            },
+            sinceName(it) to { isLifetime: Boolean ->
+                if(isLifetime) {
+                    property(sinceName(it)) ?: 0
+                } else {
+                    sessionRunsSince[it] ?: 0
+                }
+            },
+        )
+    }.flatten().toMap() + mapOf(
+        "totalRuns" to { isLifetime: Boolean ->
+            if (isLifetime) {
                 totalRuns
             } else {
                 sessionTotalRuns
             }
-        },
-        "runsSinceWhite" to {
-            if(it) {
-                runsSinceWhite
-            } else {
-                sessionRunsSinceWhite
-            }
-        },
-        "runsSinceBlack" to {
-            if(it) {
-                runsSinceBlack
-            } else {
-                sessionRunsSinceBlack
-            }
-        },
-        "runsSinceGold" to {
-            if(it) {
-                runsSinceGold
-            } else {
-                sessionRunsSinceGold
-            }
-        }
-    )
+        })
 
-    private var sessionRunsSinceWhite = 0
-    private var sessionRunsSinceBlack = 0
-    private var sessionRunsSinceGold = 0
     private var sessionTotalRuns = 0
     private val sessionBagCounts = mutableMapOf<BagType, Int>()
+    private val sessionRunsSince = mutableMapOf<BagType, Int>()
 
     private fun bagName(bagType: BagType): String {
         return "${bagType.name.lowercase()}Bags"
     }
 
-    fun addOtherBag(increase: Int) {
+    private fun sinceName(bagType: BagType): String {
+        return "runsSince${bagType.name.title()}"
+    }
+
+    private fun addOtherBag(increase: Int) {
         val current = property(bagName(BagType.OTHER)) ?: 0
         property(bagName(BagType.OTHER), current + increase)
         sessionBagCounts[BagType.OTHER] = (sessionBagCounts[BagType.OTHER] ?: 0) + increase
@@ -180,14 +129,13 @@ class LootBagFeature: Feature() {
     @Subscribe
     fun onBossComplete(event: BossCompleteEvent) {
         totalRuns++
-        runsSinceWhite++
-        runsSinceBlack++
-        runsSinceGold++
+
+        BagType.entries.forEach {
+            val runsSince = property(sinceName(it)) ?: 0
+            property(sinceName(it), runsSince + 1)
+        }
 
         sessionTotalRuns++
-        sessionRunsSinceWhite++
-        sessionRunsSinceBlack++
-        sessionRunsSinceGold++
 
         addOtherBag(1)
 
@@ -203,21 +151,8 @@ class LootBagFeature: Feature() {
         property(bagName, current + 1)
         sessionBagCounts[bagType] = (sessionBagCounts[bagType] ?: 0) + 1
 
-        when(bagType) {
-            BagType.WHITE -> {
-                runsSinceWhite = 0
-                sessionRunsSinceWhite = 0
-            }
-            BagType.BLACK -> {
-                runsSinceBlack = 0
-                sessionRunsSinceBlack = 0
-            }
-            BagType.GOLD -> {
-                runsSinceGold = 0
-                sessionRunsSinceGold = 0
-            }
-            else -> {}
-        }
+        sessionRunsSince[bagType] = 0
+        property(sinceName(bagType), 0)
 
         addOtherBag(-1)
 
