@@ -18,8 +18,7 @@ public abstract class MixinGameRenderer {
 
     @Inject(method = "showFloatingItem", at = @At("HEAD"))
     private void showFloatingItem(ItemStack floatingItem, CallbackInfo ci) {
-        if(MixinHelperKt.isNextBagFaked()) {
-            MixinHelperKt.setNextBagFaked(false);
+        if(System.currentTimeMillis() - MixinHelperKt.getLastFakedBag() < 1000) {
             return;
         }
         if(!floatingItem.getComponents().isEmpty() && !floatingItem.getComponents().contains(DataComponentTypes.CUSTOM_MODEL_DATA)) return;

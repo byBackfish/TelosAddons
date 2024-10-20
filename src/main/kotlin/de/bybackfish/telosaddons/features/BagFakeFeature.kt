@@ -4,7 +4,7 @@ import de.bybackfish.telosaddons.core.annotations.Category
 import de.bybackfish.telosaddons.core.annotations.Property
 import de.bybackfish.telosaddons.core.event.Subscribe
 import de.bybackfish.telosaddons.core.feature.Feature
-import de.bybackfish.telosaddons.core.isNextBagFaked
+import de.bybackfish.telosaddons.core.lastFakedBag
 import de.bybackfish.telosaddons.events.telos.BagDropEvent
 import de.bybackfish.telosaddons.telos.BagType
 import gg.essential.vigilance.data.PropertyType
@@ -50,7 +50,7 @@ class BagFakeFeature: Feature() {
         fakeBag.playSounds()
 
         if(!addToCounter) {
-            isNextBagFaked = true
+            lastFakedBag = System.currentTimeMillis()
         }
         mc.gameRenderer.showFloatingItem(fakeBag.createFakeTotemItemStack())
     }

@@ -13,7 +13,7 @@ import java.util.Timer
 import kotlin.concurrent.schedule
 import kotlin.reflect.full.declaredFunctions
 
-var isNextBagFaked = false
+var lastFakedBag = 0L
 
 fun handleEntity(reason: String, entity: Entity?) {
     Timer().schedule(100L) {
