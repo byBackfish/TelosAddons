@@ -1,5 +1,6 @@
 package de.bybackfish.telosaddons.features
 
+import de.bybackfish.telosaddons.core.annotations.Button
 import de.bybackfish.telosaddons.core.annotations.Category
 import de.bybackfish.telosaddons.core.annotations.Property
 import de.bybackfish.telosaddons.core.event.Subscribe
@@ -23,18 +24,35 @@ import javax.xml.crypto.Data
 @Category("UI")
 class ShowAllLootbagFeature: Feature() {
 
-    @Property
+    @Property(sortingOrder = 0)
     var announceInChat = true
+
+    @Button
+        (sortingOrder = 1, description = "Enable all bags", buttonText = "Enable All")
+    fun enableAll() {
+        BagType.entries.forEach {
+            property(showBagName(it), true)
+        }
+    }
+
+    @Button
+        (sortingOrder = 2, description = "Disable all bags", buttonText = "Disable All")
+    fun disableAll() {
+        BagType.entries.forEach {
+            property(showBagName(it), false)
+        }
+    }
 
     private val handledItems = mutableSetOf<UUID>()
 
     init {
-        BagType.entries.forEach {
-            if(it.totemModelData == -1) {
+        BagType.entries.forEachIndexed { index, bagType ->
+            if(bagType.totemModelData == -1) {
                 addSetting(
                     LocalProperty(
-                        name = showBagName(it),
+                        name = showBagName(bagType),
                         default = false,
+                        sortingOrder = index+3,
                         type = PropertyType.SWITCH
                     )
                 )
