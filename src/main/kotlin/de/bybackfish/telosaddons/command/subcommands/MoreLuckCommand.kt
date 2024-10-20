@@ -18,18 +18,17 @@ class MoreLuckCommand: SubCommand("moreluck", "Gives you more luck", "/telos mor
 
     override fun register(): LiteralArgumentBuilder<FabricClientCommandSource> {
         return LiteralArgumentBuilder.literal<FabricClientCommandSource?>("moreluck").executes {
-            toggleFeature(0)
+            toggleFeature()
             1
         }.then(ClientCommandManager.argument("type", IntegerArgumentType.integer(0, 6)).executes {
-            toggleFeature(IntegerArgumentType.getInteger(it, "type"))
+            toggleFeature(FeatureState.ENABLED, IntegerArgumentType.getInteger(it, "type"))
             1
         })
     }
 
-    fun toggleFeature(type: Int) {
-        val nextState = if(fakeBagFeature.state == FeatureState.ENABLED) FeatureState.DISABLED else FeatureState.ENABLED
-        UChat.chat("More luck is now ${nextState.name}")
-        fakeBagFeature.state = nextState
+    fun toggleFeature(state: FeatureState = if(fakeBagFeature.state == FeatureState.ENABLED) FeatureState.DISABLED else FeatureState.ENABLED, type: Int = 1) {
+        UChat.chat("More luck is now ${state.name}")
+        fakeBagFeature.state = state
         fakeBagFeature.fakeType = type
         fakeBagFeature.markDirty()
     }
