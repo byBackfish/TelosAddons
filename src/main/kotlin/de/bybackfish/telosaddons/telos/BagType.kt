@@ -1,27 +1,35 @@
 package de.bybackfish.telosaddons.telos
 
-enum class BagType(val customModelData: Int = 0) {
-    PINK,
-    PURPLE,
-    CYAN,
-    BLUE,
-    RED,
-    GOLD(15),
-    GREEN(13),
-    WHITE(11),
-    BLACK(10),
-    ORANGE(9),
-    RELIC,
-    CROSS(12),
-    RUNE(14),
-    OTHER;
+enum class BagType(val droppedModelData: Int, val totemModelData: Int = 0) {
+    YELLOW(829116),
+    ORANGE(829117),
+    BROWN(829118),
+    LIGHT_BROWN(829119),
+    PINK(829120),
+    PELUTE(829121),
+    TURQUOISE(829122),
+    CYAN(829123),
+    LIGHT_BLUE(829124),
+    DARK_BLUE(829125),
+    RUNE(829139, 14),
+    GOLD(829142, 15),
+    GREEN(829126, 13),
+    WHITE(829127, 11),
+    BLACK(829128, 10),
+    UNHOLY(829129, 12),
+    HALLOWEEN(829137, 9),
+    OTHER(-1, -1);
 
 
     companion object {
-        fun fromCustomModelData(customModelData: Int): BagType? {
+        fun fromTotemModelData(totemModelData: Int): BagType? {
             return entries.filter{
-                it.customModelData != 0
-            }.firstOrNull { it.customModelData == customModelData }
+                it.totemModelData != 0
+            }.firstOrNull { it.totemModelData == totemModelData }
+        }
+
+        fun fromDroppedModelData(droppedModelData: Int): BagType? {
+            return entries.firstOrNull { it.droppedModelData == droppedModelData }
         }
     }
 }

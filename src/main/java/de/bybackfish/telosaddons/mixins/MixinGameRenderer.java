@@ -19,7 +19,7 @@ public abstract class MixinGameRenderer {
     private void showFloatingItem(ItemStack floatingItem, CallbackInfo ci) {
         if(!floatingItem.getComponents().isEmpty() && !floatingItem.getComponents().contains(DataComponentTypes.CUSTOM_MODEL_DATA)) return;
         int customModelData = Objects.requireNonNull(floatingItem.getComponents().get(DataComponentTypes.CUSTOM_MODEL_DATA)).value();
-        BagType bagType = BagType.Companion.fromCustomModelData(customModelData);
+        BagType bagType = BagType.Companion.fromTotemModelData(customModelData);
         if (bagType == null) return;
         RareBagDropEvent rareBagDropEvent = new RareBagDropEvent(bagType);
         rareBagDropEvent.call();

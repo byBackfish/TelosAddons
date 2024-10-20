@@ -6,6 +6,8 @@ import de.bybackfish.telosaddons.events.telos.BossCompleteEvent
 import de.bybackfish.telosaddons.events.telos.BossDefeatedEvent
 import de.bybackfish.telosaddons.events.telos.BossSpawnEvent
 import de.bybackfish.telosaddons.events.telos.JoinNexusEvent
+import gg.essential.universal.UChat
+import net.minecraft.client.MinecraftClient
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket
 import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket
 
@@ -32,7 +34,10 @@ class AdvancedListeners {
     val bossSpawnedMatcher = Regex("(\\w+) has spawned at (\\d+\\.\\d+), (\\d+\\.\\d+), (\\d+\\.\\d+)")
     val bossDefeatedMatcher = Regex("(\\w+) has been defeated!?")
     val nexusMatcher = Regex("discord.telosrealms.com discord.telosrealms.com")
-    val bossCompletedMatcher = Regex("Your rank: #(\\d+)")
+    val bossDeathMatcher = Regex("^={47}")
+    val bossDeathPlayerParticipatedMatcher = Regex("^\\d{1,3}% ?[#\\d]? ?.* (.+)$")
+
+    var receivedBossDeathTime = 0L
 
     @Subscribe
     fun onChat(event: ClientChatEvent.Received) {
@@ -59,10 +64,16 @@ class AdvancedListeners {
             return
         }
 
-        if(message.matches(bossCompletedMatcher)) {
-            val match = bossCompletedMatcher.find(message)!!
-            val rank = match.groupValues[1].toInt()
-            BossCompleteEvent(rank).call()
+        if(message.matches(bossDeathMatcher)) {
+            receivedBossDeathTime = System.currentTimeMillis()
+            return
+        }
+
+        if(System.currentTimeMillis() - receivedBossDeathTime < 1000 && message.matches(bossDeathPlayerParticipatedMatcher)) {
+            val name = bossDeathPlayerParticipatedMatcher.find(message)!!.groupValues[1]
+            if(name == MinecraftClient.getInstance().player!!.name.string) {
+                BossCompleteEvent(-1).call()
+            }
             return
         }
 
