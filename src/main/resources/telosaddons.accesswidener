@@ -1,1 +1,4 @@
 accessWidener v2 named
+
+accessible method net/minecraft/entity/decoration/DisplayEntity$ItemDisplayEntity refreshData (ZF)V
+accessible field net/minecraft/entity/decoration/DisplayEntity$ItemDisplayEntity ITEM Lnet/minecraft/entity/data/TrackedData;

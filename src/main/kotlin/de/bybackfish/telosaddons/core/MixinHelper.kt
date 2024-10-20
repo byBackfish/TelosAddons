@@ -13,13 +13,6 @@ import java.util.Timer
 import kotlin.concurrent.schedule
 import kotlin.reflect.full.declaredFunctions
 
-val itemKey = ItemDisplayEntity::class.java.getDeclaredField("ITEM").apply {
-    isAccessible = true
-}.get(null) as TrackedData<ItemStack>
-
-val refreshData = ItemDisplayEntity::class.declaredFunctions.first { it.name == "refreshData" }
-
-
 var isNextBagFaked = false
 
 fun handleEntity(reason: String, entity: Entity?) {
@@ -31,14 +24,14 @@ fun handleEntity(reason: String, entity: Entity?) {
             if (entity.data == null) {
                 return@schedule
             }
-            val itemStack: ItemStack = entity.dataTracker.get(itemKey)
+            val itemStack: ItemStack = entity.dataTracker.get(ItemDisplayEntity.ITEM)
             val ref = MutableRef(itemStack)
 
             handleEntityItemStack(reason, entity, ref)
 
             if(ref.isDirty()) {
-                entity.dataTracker.set(itemKey, ref.get())
-                refreshData.call(entity, false, false)
+                entity.dataTracker.set(ItemDisplayEntity.ITEM, ref.get())
+                entity.refreshData(false, 0f)
             }
         }
     }
