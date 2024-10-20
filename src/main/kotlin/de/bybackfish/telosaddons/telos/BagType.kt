@@ -1,6 +1,6 @@
 package de.bybackfish.telosaddons.telos
 
-enum class BagType(val droppedModelData: Int, val totemModelData: Int = 0) {
+enum class BagType(val droppedModelData: Int, val totemModelData: Int = -1) {
     YELLOW(829116),
     ORANGE(829117),
     BROWN(829118),
@@ -24,7 +24,7 @@ enum class BagType(val droppedModelData: Int, val totemModelData: Int = 0) {
     companion object {
         fun fromTotemModelData(totemModelData: Int): BagType? {
             return entries.filter{
-                it.totemModelData != 0
+                it.totemModelData != -1
             }.firstOrNull { it.totemModelData == totemModelData }
         }
 

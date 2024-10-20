@@ -5,10 +5,7 @@ import de.bybackfish.telosaddons.core.config.*
 import de.bybackfish.telosaddons.core.event.EventBus
 import de.bybackfish.telosaddons.core.feature.FeatureManager
 import de.bybackfish.telosaddons.core.loadTranslations
-import de.bybackfish.telosaddons.features.DebugFeature
-import de.bybackfish.telosaddons.features.HoldToSwingFeature
-import de.bybackfish.telosaddons.features.InfoOverlayFeature
-import de.bybackfish.telosaddons.features.LootBagFeature
+import de.bybackfish.telosaddons.features.*
 import de.bybackfish.telosaddons.listeners.AdvancedListeners
 import de.bybackfish.telosaddons.listeners.ChatListener
 import de.bybackfish.telosaddons.listeners.NativeListeners
@@ -74,7 +71,8 @@ class TelosAddons : ModInitializer {
             LootBagFeature(),
             InfoOverlayFeature(),
             HoldToSwingFeature(),
-            DebugFeature()
+            DebugFeature(),
+            ShowAllLootbagFeature()
         )
 
         featureManager.loadToConfig()

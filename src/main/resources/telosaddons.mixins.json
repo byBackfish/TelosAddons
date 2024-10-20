@@ -4,6 +4,7 @@
   "package": "de.bybackfish.telosaddons.mixins",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "EntitySpawnMixin",
     "GenericContainerMixin",
     "HandledScreenMixin",
     "InventoryScreenMixin",
@@ -18,5 +19,6 @@
     "defaultRequire": 1
   },
   "mixins": [
+    "ItemDisplayEntityMixin"
   ]
 }

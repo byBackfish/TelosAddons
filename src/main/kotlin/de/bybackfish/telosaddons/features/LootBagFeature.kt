@@ -133,6 +133,8 @@ class LootBagFeature: Feature() {
         BagType.entries.forEach {
             val runsSince = property(sinceName(it)) ?: 0
             property(sinceName(it), runsSince + 1)
+
+            sessionRunsSince[it] = (sessionRunsSince[it] ?: 0) + 1
         }
 
         sessionTotalRuns++
