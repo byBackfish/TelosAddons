@@ -191,17 +191,25 @@ class LootBagFeature: Feature() {
         }
 
         override fun render(context: DrawContext, delta: Float) {
+            val text = getText(isLifetime)
+            val height = 15 + (text.size * 13)
+            this.size.height = height
+
             draw(context,
                 overlayName,
-                getText(isLifetime)
+                text
             )
         }
 
         override fun renderDummy(context: DrawContext, delta: Float) {
+            val text = getText(isLifetime)
+            val height = 15 + (text.size * 13)
+            this.size.height = height
+
             draw(
                 context,
                 "Dummy $overlayName",
-                getText(isLifetime)
+                text
             )
         }
 

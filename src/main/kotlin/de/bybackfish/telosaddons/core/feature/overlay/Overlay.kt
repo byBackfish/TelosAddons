@@ -41,6 +41,6 @@ data class OverlayPosition(
 )
 
 data class OverlaySize(
-    val width: Int,
-    val height: Int
+    var width: Int,
+    var height: Int
 )
