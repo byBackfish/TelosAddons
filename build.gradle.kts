@@ -27,8 +27,20 @@ loom {
 repositories {
     maven(url = "https://repo.essential.gg/repository/maven-public")
     maven(url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
+    maven(url = "https://jitpack.io")
 
     maven(url = "https://oss.jfrog.org/simple/libs-snapshot")
+
+    maven {
+        name = "Ladysnake Mods"
+        url = uri("https://maven.ladysnake.org/releases")
+        content {
+            includeGroup("io.github.ladysnake")
+            includeGroup("org.ladysnake")
+            includeGroupByRegex("dev\\.onyxstudios.*")
+        }
+    }
+
 
     mavenLocal()
     mavenCentral()
@@ -49,9 +61,12 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinx_coroutines_version}")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${kotlinx_serialization_version}")
 
+    modImplementation(include("io.github.0x3c50.renderer:renderer-fabric:1.2.3")!!)
+
     modImplementation(include("gg.essential:elementa:670")!!)
     modImplementation(include("gg.essential:vigilance:306")!!)
     modImplementation(include("gg.essential:universalcraft-1.21-fabric:363")!!)
+
 }
 
 val targetJavaVersion = 21

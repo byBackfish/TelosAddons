@@ -73,7 +73,9 @@ class TelosAddons : ModInitializer {
             HoldToSwingFeature(),
             DebugFeature(),
             ShowAllLootbagFeature(),
-            BagFakeFeature()
+            BagFakeFeature(),
+            AliveBossesFeature(),
+            QuickJoinButton()
         )
 
         featureManager.loadToConfig()

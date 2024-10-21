@@ -4,6 +4,7 @@ import de.bybackfish.telosaddons.core.event.Subscribe
 import de.bybackfish.telosaddons.events.*
 import de.bybackfish.telosaddons.events.telos.*
 import de.bybackfish.telosaddons.telos.BagType
+import de.bybackfish.telosaddons.telos.TelosBoss
 import gg.essential.universal.UChat
 import net.minecraft.client.MinecraftClient
 import net.minecraft.component.DataComponentTypes
@@ -32,7 +33,7 @@ class AdvancedListeners {
         }
     }
 
-    val bossSpawnedMatcher = Regex("(\\w+) has spawned at (\\d+\\.\\d+), (\\d+\\.\\d+), (\\d+\\.\\d+)")
+    val bossSpawnedMatcher = Regex("(\\w+) has spawned at (-?\\d+\\.\\d+), (-?\\d+\\.\\d+), (-?\\d+\\.\\d+)")
     val bossDefeatedMatcher = Regex("(\\w+) has been defeated!?")
     val nexusMatcher = Regex("discord.telosrealms.com discord.telosrealms.com")
     val bossDeathMatcher = Regex("^={47}")
@@ -47,7 +48,8 @@ class AdvancedListeners {
         if(message.matches(bossSpawnedMatcher)) {
             val match = bossSpawnedMatcher.find(message)!!
             val bossName = match.groupValues[1]
-            BossSpawnEvent(bossName).call()
+            val foundBoss = TelosBoss.fromName(bossName) ?: return
+            BossSpawnEvent(foundBoss).call()
 
             return
         }
@@ -55,7 +57,8 @@ class AdvancedListeners {
         if(message.matches(bossDefeatedMatcher)) {
             val match = bossDefeatedMatcher.find(message)!!
             val bossName = match.groupValues[1]
-            BossDefeatedEvent(bossName).call()
+            val foundBoss = TelosBoss.fromName(bossName) ?: return
+            BossDefeatedEvent(foundBoss).call()
 
             return
         }
