@@ -13,6 +13,7 @@ import de.bybackfish.telosaddons.events.ChestUpdateEvent
 import de.bybackfish.telosaddons.events.RenderScreenEvent
 import de.bybackfish.telosaddons.events.telos.BossDefeatedEvent
 import de.bybackfish.telosaddons.events.telos.BossSpawnEvent
+import de.bybackfish.telosaddons.events.telos.JoinNexusEvent
 import de.bybackfish.telosaddons.telos.TelosBoss
 import de.bybackfish.telosaddons.utils.renderTextInWorld
 import gg.essential.universal.UChat
@@ -95,6 +96,11 @@ class AliveBossesFeature: Feature() {
                 renderBossWaypoint(event.context, boss)
             }
         }
+    }
+
+    @Subscribe
+    fun onNexus(event: JoinNexusEvent) {
+        aliveBosses.clear()
     }
 
     private fun lerpColor(distance: Int): Int {
