@@ -90,7 +90,8 @@ class AliveBossesFeature: Feature() {
     fun onRender(event: RenderScreenEvent) {
         if(!renderWaypoints) return
         TelosBoss.entries.forEach { boss ->
-            if(boss.shouldRender(aliveBosses.keys)) {
+            val condition = boss.shouldRender ?: { aliveBosses.containsKey(boss) }
+            if(condition()) {
                 renderBossWaypoint(event.context, boss)
             }
         }

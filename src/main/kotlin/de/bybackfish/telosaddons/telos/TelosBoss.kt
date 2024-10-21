@@ -3,9 +3,7 @@ package de.bybackfish.telosaddons.telos
 import de.bybackfish.telosaddons.utils.isInRealm
 import de.bybackfish.telosaddons.utils.isInShadowlands
 
-enum class TelosBoss(val telosName: String, val x: Int, val y: Int, val z: Int, val shouldRender: (aliveBosses: Set<TelosBoss>) -> Boolean = {
-    it.contains(this as Any) && isInRealm()
-}) {
+enum class TelosBoss(val telosName: String, val x: Int, val y: Int, val z: Int, val shouldRender: (() -> Boolean)? = null) {
 
     CENTER("Center", -19, 243, 90, { isInRealm() }),
 
