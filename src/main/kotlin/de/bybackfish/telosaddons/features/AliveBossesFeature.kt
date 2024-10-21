@@ -1,6 +1,5 @@
 package de.bybackfish.telosaddons.features
 
-import com.mojang.blaze3d.systems.RenderSystem
 import de.bybackfish.telosaddons.core.annotations.Category
 import de.bybackfish.telosaddons.core.annotations.EnabledByDefault
 import de.bybackfish.telosaddons.core.annotations.OverlayInfo
@@ -10,29 +9,19 @@ import de.bybackfish.telosaddons.core.feature.Feature
 import de.bybackfish.telosaddons.core.feature.overlay.Overlay
 import de.bybackfish.telosaddons.core.feature.overlay.OverlayPosition
 import de.bybackfish.telosaddons.core.feature.overlay.OverlaySize
-import de.bybackfish.telosaddons.events.*
-import de.bybackfish.telosaddons.events.gui.InitGuiEvent
+import de.bybackfish.telosaddons.events.ChestUpdateEvent
+import de.bybackfish.telosaddons.events.RenderScreenEvent
 import de.bybackfish.telosaddons.events.telos.BossDefeatedEvent
 import de.bybackfish.telosaddons.events.telos.BossSpawnEvent
-import de.bybackfish.telosaddons.extensions.text
 import de.bybackfish.telosaddons.telos.TelosBoss
-import de.bybackfish.telosaddons.utils.isInRealm
-import de.bybackfish.telosaddons.utils.isInShadowlands
 import de.bybackfish.telosaddons.utils.renderTextInWorld
 import gg.essential.universal.UChat
-import gg.essential.universal.wrappers.message.UTextComponent
-import me.x150.renderer.util.RendererUtils
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.item.Item
-import net.minecraft.item.tooltip.TooltipData
 import net.minecraft.item.tooltip.TooltipType
-import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import java.awt.Color
-import java.util.*
-import kotlin.concurrent.schedule
 
 @Category("UI")
 @EnabledByDefault
