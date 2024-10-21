@@ -1,6 +1,5 @@
 package de.bybackfish.telosaddons.utils
 
-import me.x150.renderer.util.RendererUtils
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.util.math.Vec3d
@@ -8,11 +7,16 @@ import org.joml.Matrix4f
 import org.joml.Vector3f
 import org.joml.Vector4f
 
+var lastProjectionMatrix = Matrix4f()
+var lastModelMatrix = Matrix4f()
+var lastWorldSpaceMatrix = Matrix4f()
+var lastViewport = IntArray(4)
+
+
 fun renderTextInWorld(context: DrawContext, pos: Vec3d, texts: List<String>, color: Int, yOffset: Int = 10) {
     val client = MinecraftClient.getInstance()
     val screenSpace = worldSpaceToScreenSpace(pos)
 
-    // round screenspace to the 4th digit
     if (isVisible(screenSpace)) {
         texts.forEachIndexed { index, text ->
             context.drawCenteredTextWithShadow(
@@ -45,18 +49,18 @@ fun worldSpaceToScreenSpace(pos: Vec3d): Vec3d {
     val deltaZ = pos.z - camera.pos.z
 
     val transformedCoordinates = Vector4f(deltaX.toFloat(), deltaY.toFloat(), deltaZ.toFloat(), 1f).mul(
-        RendererUtils.lastWorldSpaceMatrix
+        lastWorldSpaceMatrix
     )
 
-    val matrixProj = Matrix4f(RendererUtils.lastProjMat)
-    val matrixModel = Matrix4f(RendererUtils.lastModMat)
+    val matrixProj = Matrix4f(lastProjectionMatrix)
+    val matrixModel = Matrix4f(lastModelMatrix)
 
     matrixProj.mul(matrixModel)
         .project(
             transformedCoordinates.x(),
             transformedCoordinates.y(),
             transformedCoordinates.z(),
-            RendererUtils.lastViewport,
+            lastViewport,
             target
         )
 
