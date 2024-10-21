@@ -16,6 +16,8 @@ import de.bybackfish.telosaddons.events.telos.BossDefeatedEvent
 import de.bybackfish.telosaddons.events.telos.BossSpawnEvent
 import de.bybackfish.telosaddons.extensions.text
 import de.bybackfish.telosaddons.telos.TelosBoss
+import de.bybackfish.telosaddons.utils.isInRealm
+import de.bybackfish.telosaddons.utils.isInShadowlands
 import de.bybackfish.telosaddons.utils.renderTextInWorld
 import gg.essential.universal.UChat
 import gg.essential.universal.wrappers.message.UTextComponent
@@ -43,8 +45,6 @@ class AliveBossesFeature: Feature() {
     var renderWaypoints = true
 
     private val aliveBosses = mutableMapOf<TelosBoss, Long>()
-
-    val permanentWaypoints = TelosBoss.entries.filter { it.permanent }
 
     val BOSS_NAME_REGEX = Regex(". \\[(.+)] .")
 
@@ -97,15 +97,17 @@ class AliveBossesFeature: Feature() {
     @Subscribe
     fun onRender(event: RenderScreenEvent) {
         if(!renderWaypoints) return
-        (permanentWaypoints + aliveBosses.keys).forEach { boss ->
-            renderBossWaypoint(event.context, boss)
+        TelosBoss.entries.forEach { boss ->
+            if(boss.shouldRender(aliveBosses.keys)) {
+                renderBossWaypoint(event.context, boss)
+            }
         }
     }
 
     fun lerpColor(distance: Int): Int {
         val lerp = distance / 1000.0
-        val r = (lerp * 255).toInt()
-        val g = (255 - (lerp * 255)).toInt()
+        val r = ((lerp * 255).coerceIn(0.0, 255.0)).toInt()
+        val g = ((255 - (lerp * 255)).coerceIn(0.0, 255.0)).toInt()
         val b = 0
         return Color(r, g, b).rgb
     }

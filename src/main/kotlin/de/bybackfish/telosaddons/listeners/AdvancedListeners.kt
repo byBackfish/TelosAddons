@@ -11,6 +11,7 @@ import net.minecraft.component.DataComponentTypes
 import net.minecraft.item.Items
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket
 import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket
+import net.minecraft.text.Text
 import java.util.*
 
 class AdvancedListeners {
@@ -18,7 +19,7 @@ class AdvancedListeners {
     @Subscribe
     fun onPacket(event: PacketEvent.Incoming) {
         if (event.packet is GameMessageS2CPacket) {
-            if (ClientChatEvent.Received(event.packet.content.string).call()) event.isCancelled =
+            if (ClientChatEvent.Received(event.packet.content, event.packet.content.string).call()) event.isCancelled =
                 true
         }
 
@@ -40,6 +41,7 @@ class AdvancedListeners {
     val bossDeathPlayerParticipatedMatcher = Regex("^\\d{1,3}% ?[#\\d]? ?.* (.+)$")
 
     var receivedBossDeathTime = 0L
+
 
     @Subscribe
     fun onChat(event: ClientChatEvent.Received) {

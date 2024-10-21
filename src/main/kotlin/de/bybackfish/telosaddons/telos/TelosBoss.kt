@@ -1,12 +1,15 @@
 package de.bybackfish.telosaddons.telos
 
-enum class TelosBoss(val telosName: String, val x: Int, val y: Int, val z: Int, val permanent: Boolean = false) {
+import de.bybackfish.telosaddons.utils.isInRealm
+import de.bybackfish.telosaddons.utils.isInShadowlands
+import net.minecraft.client.MinecraftClient
 
-    SHADOWLANDS_SPAWN("Shadowlands Spawn", 170, 61, 427, true),
-    CENTER("Center", -19, 500, 90, true),
+enum class TelosBoss(val telosName: String, val x: Int, val y: Int, val z: Int, val shouldRender: (aliveBosses: Set<TelosBoss>) -> Boolean = {
+    it.contains(this as Any) && isInRealm()
+}) {
 
-    HERALD("Herald", 148, -47, -176),
-    WARDEN("Warden", -126, -46, -122),
+    CENTER("Center", -19, 243, 90, { true }),
+
     ASTAROTH("Astaroth", 253, 218, 60),
     HOLLOWBANE("Hollowbane", 231, 200, 704),
     LOTIL("Lotil", -138, 218, 20),
@@ -18,8 +21,12 @@ enum class TelosBoss(val telosName: String, val x: Int, val y: Int, val z: Int, 
     TIDOL("Tidol", -544, 189, 363),
     CHUNGUS("Chungus", 60, 256, -490),
     OOZUL("Oozul", -425, 195, 89),
-    REAPER("Reaper", 23, -47, 323),
-    DEFENDER("Defender", 64, -51, 64);
+
+    HERALD("Herald", 148, -47, -176, { isInShadowlands() }),
+    WARDEN("Warden", -126, -46, -122, { isInShadowlands() }),
+    REAPER("Reaper", 23, -47, 323, { isInShadowlands() }),
+    DEFENDER("Defender", 64, -51, 64, { isInShadowlands() });
+
 
     companion object {
         fun fromName(name: String): TelosBoss? {
