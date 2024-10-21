@@ -6,6 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import de.bybackfish.telosaddons.core.MixinHelperKt;
 import de.bybackfish.telosaddons.events.telos.RareBagDropEvent;
 import de.bybackfish.telosaddons.telos.BagType;
+import de.bybackfish.telosaddons.utils.FastMStack;
 import de.bybackfish.telosaddons.utils.RenderUtilKt;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
@@ -18,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 @Mixin(GameRenderer.class)
@@ -41,13 +43,15 @@ public abstract class MixinGameRenderer {
     void renderer_postWorldRender(WorldRenderer instance, RenderTickCounter renderTickCounter, boolean b, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, Operation<Void> original) {
         original.call(instance, renderTickCounter, b, camera, gameRenderer, lightmapTextureManager, matrix4f, matrix4f2);
 
-        MatrixStack matrix = new MatrixStack();
+        MatrixStack matrix = new FastMStack();
         matrix.multiplyPositionMatrix(matrix4f);
 
-        RenderUtilKt.setLastProjectionMatrix(RenderSystem.getProjectionMatrix());
-        RenderUtilKt.setLastModelMatrix(RenderSystem.getModelViewMatrix());
-        RenderUtilKt.setLastProjectionMatrix(matrix.peek().getPositionMatrix());
+        RenderUtilKt.getLastProjMat().set(RenderSystem.getProjectionMatrix());
+        RenderUtilKt.getLastModMat().set(RenderSystem.getModelViewMatrix());
+        RenderUtilKt.getLastWorldSpaceMatrix().set(matrix.peek().getPositionMatrix());
         GL11.glGetIntegerv(GL11.GL_VIEWPORT, RenderUtilKt.getLastViewport());
     }
+
+
 
 }

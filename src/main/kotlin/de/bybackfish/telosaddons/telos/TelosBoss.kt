@@ -2,13 +2,12 @@ package de.bybackfish.telosaddons.telos
 
 import de.bybackfish.telosaddons.utils.isInRealm
 import de.bybackfish.telosaddons.utils.isInShadowlands
-import net.minecraft.client.MinecraftClient
 
 enum class TelosBoss(val telosName: String, val x: Int, val y: Int, val z: Int, val shouldRender: (aliveBosses: Set<TelosBoss>) -> Boolean = {
     it.contains(this as Any) && isInRealm()
 }) {
 
-    CENTER("Center", -19, 243, 90, { true }),
+    CENTER("Center", -19, 243, 90, { isInRealm() }),
 
     ASTAROTH("Astaroth", 253, 218, 60),
     HOLLOWBANE("Hollowbane", 231, 200, 704),

@@ -33,6 +33,9 @@ class AliveBossesFeature: Feature() {
     @Property
     var renderWaypoints = true
 
+    @Property
+    var debug = false
+
     private val aliveBosses = mutableMapOf<TelosBoss, Long>()
 
     val BOSS_NAME_REGEX = Regex(". \\[(.+)] .")
@@ -93,7 +96,7 @@ class AliveBossesFeature: Feature() {
         }
     }
 
-    fun lerpColor(distance: Int): Int {
+    private fun lerpColor(distance: Int): Int {
         val lerp = distance / 1000.0
         val r = ((lerp * 255).coerceIn(0.0, 255.0)).toInt()
         val g = ((255 - (lerp * 255)).coerceIn(0.0, 255.0)).toInt()
@@ -111,7 +114,7 @@ class AliveBossesFeature: Feature() {
             "${distance.toInt()}m",
         )
 
-        renderTextInWorld(context, vec3d, texts, color)
+        renderTextInWorld(context, vec3d, texts, color, debug = debug)
     }
 
 

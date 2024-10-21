@@ -12,6 +12,7 @@ import net.minecraft.sound.SoundEvent
 import net.minecraft.util.Identifier
 
 enum class BagType(val droppedModelData: Int, val totemModelData: Int = -1, val soundName: String? = null) {
+
     YELLOW(829116),
     ORANGE(829117),
     BROWN(829118),
